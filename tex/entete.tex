@@ -1,0 +1,62 @@
+\documentclass{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%% Lengths %%%%%%%%%%%%%%%%
+\setlength{\textwidth}{15.5cm}
+\setlength{\evensidemargin}{0.5cm}
+\setlength{\oddsidemargin}{0.5cm}
+
+%%%%%%%%%%%%%%%% Variables %%%%%%%%%%%%%%%%
+\def\projet{0}
+\def\titre{Résolution de systèmes linéaires / Application à l'équation de la chaleur}
+\def\groupe{4}
+\def\equipe{4}
+\def\responsible{acattarin}
+\def\secretary{electakone}
+\def\others{mchellaf, bchenard}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%% Header %%%%%%%%%%%%%%%%
+\noindent\begin{minipage}{0.98\textwidth}
+  \vskip 0mm
+  \noindent
+  { \begin{tabular}{p{7.5cm}}
+      {\bfseries \sffamily
+        Projet \projet} \\ 
+      {\itshape \titre}
+    \end{tabular}}
+  \hfill 
+  \fbox{\begin{tabular}{l}
+      {~\hfill \bfseries \sffamily Groupe \groupe\ - Equipe \equipe
+        \hfill~} \\[2mm] 
+      Responsable : \responsible \\
+      Secrétaire : \secretary \\
+      Codeurs : \others
+    \end{tabular}}
+  \vskip 4mm ~
+
+  ~~~\parbox{0.95\textwidth}{\small \textit{Résumé~:} \sffamily  }
+  \vskip 1mm ~
+\end{minipage}
+
+%%%%%%%%%%%%%%%% Main part %%%%%%%%%%%%%%%%
+\section{Décomposition de Cholesky}
+\label{sec:decomp_cholesky}
+
+\subsection{Factorisation complète}
+\label{ssec:factor_compl}
+
+\subsection{Factorisation incomplète}
+\label{ssec:factor_incompl}
+
+
+\section{Méthode du gradient conjugué}
+\label{sec:meth_grad_conj}
+
+\section{Application à l'équation de la chaleur}
+\label{sec:eq_chaleur}
+
+\end{document}
