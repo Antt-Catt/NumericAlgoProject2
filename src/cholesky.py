@@ -19,16 +19,23 @@ def cholesky_exp(A):
             i += 1
     return T
 
-def sym_matrices_gen(n,x):
+def sym_defpos_matrices_gen(n,x):
     S=np.zeros((n,n))
-    while (x>0):
-        i=rd.randint(n)
-        j=rd.randint(n)
-        if (S[i][j] == 0):
-            S[i][j]=rd.randint(n)
+    k=x//n
+    for i in range (n):
+        L=rd.sample(range(0,n-1),k)
+        for j in L:
+            S[i][j]=rd.randint(1,10)
             S[j][i]=S[i][j]
-            x -= 1
-    return S
+    for j in range(n):
+        sum=0
+        for i in range (n):
+            if (j != i):
+                sum += S[i][j]
+        print(sum)
+        S[j][j]=sum+1
+        return S
+
 
 def cholesky_incomp(A):
     n,_=np.shape(A)
@@ -60,9 +67,14 @@ A[3][3]=15
 A[2][2]=14
 A[3][2]=14
 A[2][3]=14
-print("Matrice de test :\n",A,"\n")
-print("Résultat théorique :\n",np.linalg.cholesky(A),"\n")
-print("Résultation pour implémentation :\n",cholesky_exp(A))
-print("Résultation pour implémentation incomplète:\n",cholesky_exp(A))
+
+
+##print("Matrice de test :\n",A,"\n")
+##print("Résultat théorique :\n",np.linalg.cholesky(A),"\n")
+##print("Résultation pour implémentation :\n",cholesky_exp(A))
+C=sym_defpos_matrices_gen(10,30)
+print("Génération matrice symétrique creuse:\n",C)
+print("Résultat théorique :\n",np.linalg.cholesky(C),"\n")
+print("Résultation pour implémentation incomplète:\n",cholesky_incomp(C))
 
 
