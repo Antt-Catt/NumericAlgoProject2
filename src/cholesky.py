@@ -32,7 +32,6 @@ def sym_defpos_matrices_gen(n,x):
         for i in range (n):
             if (j != i):
                 sum += S[i][j]
-        print(sum)
         S[j][j]=sum+1
         return S
 
