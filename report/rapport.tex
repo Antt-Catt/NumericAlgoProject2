@@ -98,8 +98,15 @@ Pour tester la factorisation incomplète, il faut d'abord tester si la matrice g
 Pour cela, on peut utiliser la fonction \verb|numpy.linalg.cholesky()|. Cette fonction renvoie une erreur si la matrice en entrée n'est pas définie postive et la matrice T théorique que l'on doit obtenir avec notre algorithme.
 
 La complexité de la factorisation de Cholesky incomplète ne dépend plus de la taille de la matrice comme pour la factorisation complète mais du nombre de termes non nuls. En effet, puisque l'on effectue des calculs que lorsque l'on a A[i][j] $\ne$ 0.
-Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). La complexité est donc bien meilleure que celle de la factorisation de Cholesky complète.
+Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). Lgit a complexité est donc bien meilleure que celle de la factorisation de Cholesky complète.
 
+Nous allons maintenant étudier le conditionnement des matrices obtenues avec les factorisations de Cholesky complète et incomplète. Pour cela, on utilisera les fonctions \verb|np.linalg.cond| et \verb|np.inv().
+Le conditionnement d'une matrice est une mesure de la sensibilité de la solution d'un système linéaire par rapport aux perturbations des données d'entrée. Un conditionnement élevé indique que des petites perturbations dans les données d'entrée peuvent provoquer des variations importantes dans la solution du système linéaire.
+Ainsi, ici, on considère que lorsque que le conditionnement est inférieur au préconditionnement, alors il est de bonne qualité.
+Puisque la factorisation incomplète effectue moins d'opérations, on obtient de meilleurs conditionnements avec cette méthode plutôt qu'avec la factorisation de Cholesky complète.
+
+En résumé, cette partie a exploré les différents aspects de la factorisation de Cholesky et de la factorisation de Cholesky incomplète, en mettant l'accent sur leur efficacité pour les matrices creuses. 
+Nous avons également examiné la qualité des préconditionneurs obtenus à partir de ces méthodes et avons conclu que la factorisation de Cholesky incomplète donne de meilleurs résultats.
 \section{Méthode du gradient conjugué}
 \label{sec:meth_grad_conj}
 

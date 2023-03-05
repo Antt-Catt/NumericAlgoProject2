@@ -79,16 +79,16 @@ print("Résultation pour implémentation incomplète:\n",cholesky_incomp(C))
 T=cholesky_comp(A)
 
 # Matrice préconditionnée
-M = np.linalg.inv(T.T) @ np.linalg.inv(T)
+M_1 = np.linalg.inv(T.T) @ np.linalg.inv(T)
 
 # Conditionnement de A
 cond_A = np.linalg.cond(A)
 
 # Conditionnement de la matrice préconditionnée
-cond_M = np.linalg.cond(M @ A)
+cond_M_1 = np.linalg.cond(M_1 @ A)
 
 # Comparaison des conditionnements
-if cond_M < cond_A:
+if cond_M_1 < cond_A:
     print("La matrice préconditionnée est de bonne qualité.")
 else:
     print("La matrice préconditionnée est de mauvaise qualité.")
@@ -100,16 +100,21 @@ else:
 T=cholesky_incomp(A)
 
 # Matrice préconditionnée
-M = np.linalg.inv(T.T) @ np.linalg.inv(T)
+M_2 = np.linalg.inv(T.T) @ np.linalg.inv(T)
 
 # Conditionnement de A
 cond_A = np.linalg.cond(A)
 
 # Conditionnement de la matrice préconditionnée
-cond_M = np.linalg.cond(M @ A)
+cond_M_2 = np.linalg.cond(M_2 @ A)
 
 # Comparaison des conditionnements
-if cond_M < cond_A:
+if cond_M_2 < cond_A:
     print("La matrice préconditionnée est de bonne qualité.")
 else:
     print("La matrice préconditionnée est de mauvaise qualité.")
+
+if cond_M_1 < cond_M_2:
+    print("Le conditionnement est meilleur avec la factorisation de Cholesky complète")
+else:
+    print("Le conditionnement est meilleur avec la factorisation de Cholesky incomplète")
