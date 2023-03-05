@@ -84,6 +84,21 @@ La complexité de la résolution d'un système triangulaire est en O($n^2$). Ain
 
 \subsection{Factorisation incomplète}
 \label{ssec:factor_incompl}
+Nous voulons mettre en place la factorisation de Cholesky incomplète, cette méthode suit la factorisation complète à l'exception que lorsque A[i][j] = 0 , on mettra T[i][j] à 0. Ceci évite de faire des calculs inutiles. 
+Nous allons d'abord écrire un algorithme pour générer des matrices symétriques définies positives creuses avec un nombre de termes extra-diagonaux non nuls réglable. Pour cela, nous allons procéder par étape:
+\begin{itemize}
+    \item On génère une matrice carrée de taille n avec des termes aléatoires.
+    \item On met $n^2$ - k termes à 0 (k est le nombre de termes extra-diagonaux non nuls réglable).
+    \item On rend la matrice symétrique en effectuant l'opération : A = 0.5.(A+$A^{T}$)
+    \item On rend la matrice définie postive en calculant : A = A.$A^{T}$.
+
+\end{itemize}
+
+Pour tester la factorisation incomplète, il faut d'abord tester si la matrice générée par notre algorithme est bien creuse symétrique et définie positive puis ensuite vérifier si la matrice obtenue après factorisation est bien correcte. 
+Pour cela, on peut utiliser la fonction \verb|numpy.linalg.cholesky()|. Cette fonction renvoie une erreur si la matrice en entrée n'est pas définie postive et la matrice T théorique que l'on doit obtenir avec notre algorithme.
+
+La complexité de la factorisation de Cholesky incomplète ne dépend plus de la taille de la matrice comme pour la factorisation complète mais du nombre de termes non nuls. En effet, puisque l'on effectue des calculs que lorsque l'on a A[i][j] $\ne$ 0.
+Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). La complexité est donc bien meilleure que celle de la factorisation de Cholesky complète.
 
 \section{Méthode du gradient conjugué}
 \label{sec:meth_grad_conj}

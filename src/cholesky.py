@@ -3,7 +3,7 @@ import numpy as np
 import random as rd
 
 def cholesky_comp(A):
-    n = len(A)
+    n = A.shape[0]
     T = np.zeros((n, n))
     for i in range(n):
         for j in range(i):

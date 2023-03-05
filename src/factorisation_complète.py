@@ -16,6 +16,6 @@ def cholesky_fact(A):
             for k in range(i):
                 s2 += T[i][k]*T[j][k]
             T[j][i] = (A[i][j] - s2)/T[i][i]
-    return T
+    return np.transpose(T)
             
         

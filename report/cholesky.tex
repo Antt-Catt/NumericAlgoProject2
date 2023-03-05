@@ -39,7 +39,16 @@ La complexité de la résolution d'un système triangulaire est en O($n^2$). Ain
 
 \subsection{Factorisation complète}
 \label{ssec:factor_compl}
-this is a test
+
+Nous allons d'abord écrire un algorithme pour générer des matrices symétriques définies positives creuses avec un nombre de termes extra-diagonaux non nuls réglable. Pour cela, nous allons procéder par étape:
+\begin{itemize}
+    \item On génère une matrice carrée de taille n avec des termes aléatoires.
+    \item On met $n^2$-k termes à 0 (k est le nombre de termes extra-diagonaux non nuls réglable).
+    \item On rend la matrice symétrique en effectuant l'opération : A = 0.5(A+$A^{T}$)
+    \item On rend la matrice définie postive en calculant : A = A.$A^{T}$.
+
+\end{itemize}
+
 \subsection{Factorisation incomplète}
 \label{ssec:factor_incompl}
 
