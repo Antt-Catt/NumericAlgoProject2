@@ -48,10 +48,42 @@
 
 \subsection{Factorisation complète}
 \label{ssec:factor_compl}
-this is a test
+L'algorithme de la factorisation dense de Cholesky peut s'écrire ainsi:
+\begin{verbatim}
+
+fonction cholesky(A : matrice symétrique définie positive) -> T : matrice triangulaire inférieure
+    n = taille(A)
+    T = matrice de zéros de taille n x n
+    pour i allant de 0 à n-1 faire
+        pour j allant de 0 à i-1 faire
+            somme = 0
+            pour k allant de 0 à j-1 faire
+                somme = somme + T[i,k] * T[j,k]
+            fin pour
+            T[i,j] = (A[i,j] - somme) / T[j,j]
+        fin pour
+        somme = 0
+        pour k allant de 0 à i-1 faire
+            somme = somme + T[i,k]^2
+        fin pour
+        T[i,i] = racine_carree(A[i,i] - somme)
+    fin pour
+    retourner T
+fin fonction
+
+\end{verbatim}
+
+Cet algorithme a une complexité en O($n^3$) avec n la taille de la matrice A prise en paramètre.
+
+Pour résoudre un système linéaire du type A.x=b en utilisant la factorisation de Cholesky, il y a plusieurs étapes : 
+\begin{itemize}
+    \item La décomposition de Cholesky : on doit calculer la matrice triangulaire inférieure T telle que A=$TT^{T}$. Cela peut être fait en utilisant l'algorithme de décomposition de Cholesky décrit précédemment.
+    \item La résolution du système triangulaire : on doit résoudre deux systèmes linéaires triangulaires, l'un inférieur T.y=b et l'autre supérieur $T^{T}$x=y. Ces systèmes linéaires triangulaires peuvent être résolus en temps linéaire, car les matrices sont triangulaires. 
+\end{itemize}
+La complexité de la résolution d'un système triangulaire est en O($n^2$). Ainsi, la complexité totale de la résolution d'un système linéaire dense est: O($n^3$ + $n^2$) soit O($n^3$). 
+
 \subsection{Factorisation incomplète}
 \label{ssec:factor_incompl}
-
 
 \section{Méthode du gradient conjugué}
 \label{sec:meth_grad_conj}
