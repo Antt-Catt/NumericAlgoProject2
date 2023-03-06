@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{hyperref}
 
 %%%%%%%%%%%%%%%% Lengths %%%%%%%%%%%%%%%%
 \setlength{\textwidth}{15.5cm}
@@ -11,7 +12,7 @@
 \setlength{\oddsidemargin}{0.5cm}
 
 %%%%%%%%%%%%%%%% Variables %%%%%%%%%%%%%%%%
-\def\projet{0}
+\def\projet{2}
 \def\titre{Résolution de systèmes linéaires / Application à l'équation de la chaleur}
 \def\groupe{4}
 \def\equipe{4}
@@ -40,7 +41,11 @@
     \end{tabular}}
   \vskip 4mm ~
 
-  ~~~\parbox{0.95\textwidth}{\small \textit{Résumé~:} \sffamily  }
+  ~~~\parbox{0.95\textwidth}{\small \textit{Résumé~:} \sffamily  Dans ce projet, nous avons mis en oeuvre des algorithmes de résolution de systèmes linéaires. L'utilité étant ici de pouvoir résoudre des systèmes linéaires de grandes tailles de manière automatique. Dans un premier temps nous nous intéressons à la décomposition de Cholesky.En effet, cette décomposition permet de calculer plus facilement l'inverse de matrice et ainsi économiser du temps de calcul.
+
+Dans un second temps, nous nous intéressons au coeur du sujet qui est la résolution de systèmes linéaires. Pour cela nous utilisons la méthode du gradient conjugué qui utilise une méthode algorithmique afin de se rapprocher le plus du vecteur solution au problème. Cependant, cette méthode peut encore être amélioré. En effet en utilisant un préconditionneur, nous pouvons utiliser une matrice d'origine qui facilite les calculs effectués par la machine.
+
+Finalement, nous avons utilisé ce qu'on nous avons appris afin de l'appliquer dans un exemple concret. La résolution de système linéaire permet de modéliser la propagation de la chaleur dans un volume grâce à la discrétisation de l'équation de la chaleur. En effet, l'opérateur Laplacien peut être ramené à un calcul linéaire grâce aux développements limités de ses termes.}
   \vskip 1mm ~
 \end{minipage}
 
@@ -100,7 +105,7 @@ Pour tester la factorisation incomplète, il faut d'abord tester si la matrice g
 Pour cela, on peut utiliser la fonction \verb|numpy.linalg.cholesky()|. Cette fonction renvoie une erreur si la matrice en entrée n'est pas définie postive et la matrice T théorique que l'on doit obtenir avec notre algorithme.
 
 La complexité de la factorisation de Cholesky incomplète ne dépend plus de la taille de la matrice comme pour la factorisation complète mais du nombre de termes non nuls. En effet, puisque l'on effectue des calculs que lorsque l'on a A[i][j] $\ne$ 0.
-Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). Lgit a complexité est donc bien meilleure que celle de la factorisation de Cholesky complète.
+Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). La complexité est donc bien meilleure que celle de la factorisation de Cholesky complète.
 
 Le conditionnement d'une matrice est une mesure de la sensibilité de la solution d'un système linéaire par rapport aux perturbations des données d'entrée. Un conditionnement élevé indique que des petites perturbations dans les données d'entrée peuvent provoquer des variations importantes dans la solution du système linéaire.
 Ainsi, ici, on considère que lorsque que le conditionnement est inférieur au préconditionnement, alors il est de bonne qualité.
@@ -111,6 +116,85 @@ En résumé, cette partie a exploré les différents aspects de la factorisation
 Nous avons également examiné la qualité des préconditionneurs obtenus à partir de ces méthodes et avons conclu que la factorisation de Cholesky incomplète donne de meilleurs résultats.
 \section{Méthode du gradient conjugué}
 \label{sec:meth_grad_conj}
+
+Pour cette partie, nous avons choisi de tester nos fonctions avec des matrices et vecteurs aléatoires, afin d'avoir une plus grande batterie de test. Nos prenons en compte l'équation $Ax = b$.
+
+\begin{itemize}
+  \item Voici les raisons pour lesquelles cette implémentation ne respecte pas les standards de codage sains. Le code ne contient aucun commentaire pour expliquer les différentes étapes de l'algorithme. Le nom des variables est peu explicites, ce qui rend la compréhension de leur rôle plus difficile. Le nom des variables est dans certains cas assez similaires ce qui rend la relecture du code plus difficile. Le code est peu aéré ce qui rend la lecture moins agréable.
+  \item La méthode décrite précédemment transforme la matrice $A$ en une matrice triangulaire grâce aux pivots afin de résoudre l'équation plus facilement. Cette méthode a un complexité en $n³$ pour la factorisation complète et quadratique pour l'incomplète. La méthode du gradient conjugué modifie un vecteur (donc à une dimension) quelconque grâce à une suite d'opérations afin de le faire converger vers la solution. Cet algorithme possède une boucle que l'on itère au maximum $n$ fois, où $n$ est la taille du second membre du système (i.e. le nombre d'équations du système). Cette méthode a donc une compléxité linéaire selon le nombre $n$ d'équations, soit moins $n$ fois moins que la méthode de la section \ref{sec:decomp_cholesky}. Ce gain est systématique.
+\end{itemize}
+
+\vspace{3mm}
+Dans notre implémentation, nous avons augmenté le nombre maximal d'itération de la boucle à \verb|10*len(b)|. En effet, lorsque la taille du système augmente, l'algorithme met de plus en plus de temps à converger suffisamment proche la solution.
+
+Sans être autant précis, nous pouvons voir que pour une taille très grande (\ref{fig:50x50_grad}), l'algorithme converge tout de même assez tôt vers la solution. Dans ce cas, il n'y aurait pas nécessité d'augmenter le nombre d'itération maximum. Cependant, lors de l'un de nos tests, la dernière itération s'est terminée sur un pic (comme on peut en voir dans le graphique \ref{subfig:50x50_grad_prcd}, juste avant les 50 itérations). C'est pourquoi nous avons choisi d'augmenter le nombre d'itération maximum.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_1.png}
+    \caption{Sans préconditionneur}
+    \label{subfig:2x2_grad_sans}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_5.png}
+    \caption{Avec préconditionneur}
+    \label{subfig:2x2_grad_prcd}
+  \end{subfigure}
+  \caption{Evolution du résidu de la méthode du gradient conjugué pour un système de taille 2}
+  \label{fig:2x2_grad}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_3.png}
+    \caption{Sans préconditionneur}
+    \label{subfig:5x5_grad_sans}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_7.png}
+    \caption{Sans préconditionneur}
+    \label{subfig:5x5_grad_prcd}
+  \end{subfigure}
+  \caption{Evolution du résidu de la méthode du gradient conjugué pour un système de taille 5}
+  \label{fig:5x5_grad}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_4.png}
+    \caption{Avec préconditionneur}
+    \label{subfig:50x50_grad_sans}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.35\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Figure_8.png}
+    \caption{Sans préconditionneur}
+    \label{subfig:50x50_grad_prcd}
+  \end{subfigure}
+  \caption{Evolution du résidu de la méthode du gradient conjugué pour un système de taille 50}
+  \label{fig:50x50_grad}
+\end{figure}
+
+\vspace{3mm}
+Cet méthode peut également être implémentée à l'aide d'un préconditionneur. Ce dernier a pour but d'accélérer la convergence vers la solution.
+
+Nous avons ici utiliser la factorisation de Cholesky incomplète pour produire ces préconditionneurs.
+
+Cependant, nous n'avons pas observé de diminution du temps de convergence. Au contraire, le nombre d'itération a considérablement augmenté ($\times3,45$ pour un système de taille 50). Nous nous sommes assurés que le conditionnement du préconditionneur était bien meilleur que celui de la matrice $A$). Nous n'avons pas trouvé d'explication à ce comportement.
+
+Dans la partie \ref{sec:eq_chaleur}, nous utiliserons donc la méthode sans conditionnement.
+
 
 \section{Application à l'équation de la chaleur}
 \label{sec:eq_chaleur}
@@ -140,21 +224,21 @@ Ci-dessous se trouvent nos résultats pour deux situations : la première possé
 
 \begin{figure}[ht]
   \centering
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_1.png}
     \caption{Carte de la source de chaleur}
     \label{subfig:central_source_prev}
   \end{subfigure}
   \hfill
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_1b.png}
     \caption{Carte de la répartition de la température}
     \label{subfig:central_source_temp}
   \end{subfigure}
   \hfill
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_1c.png}
     \caption{Evolution du résidu de la méthode du gradient conjugué}
@@ -166,21 +250,21 @@ Ci-dessous se trouvent nos résultats pour deux situations : la première possé
 
 \begin{figure}[ht]
   \centering
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_2.png}
     \caption{Carte de la source de chaleur}
     \label{subfig:heat_wall_prev}
   \end{subfigure}
   \hfill
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_2b.png}
     \caption{Carte de la répartition de la température}
     \label{subfig:heat_wall_temp}
   \end{subfigure}
   \hfill
-  \begin{subfigure}{0.3\textwidth}
+  \begin{subfigure}{0.25\textwidth}
     \centering
     \includegraphics[width=\linewidth]{Chaleur_2c.png}
     \caption{Evolution du résidu de la méthode du gradient conjugué}
