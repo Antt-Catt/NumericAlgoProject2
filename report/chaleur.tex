@@ -1,0 +1,27 @@
+\begin{document}
+
+\subsection{Fonctions principales}
+Grâce à la discrétisation numérique, l'équation de la chaleur peut être ramener à la résolution d'un système linéaire. 
+La matrice représentant l'opérateur Laplacien étant donné, il a suffit de créer la fonction permettant de la construire.
+Cette fonction possède une compléxité en $\Theta(N²)$ étant donné qu'on parcours toute la matrice.\\\\
+
+Ensuite, nous avons mis en place des "situations" où certains points étaient sources de chaleur. Cela à permis de voir comment se comportait
+l'algorithme dans plus cas de figures différents. \\\\
+
+
+
+
+
+\subsection{Fonctions auxiliaires}
+Il a été nécessaire de mettre en place des fonctions permettant de passer un vecteur en matrice et inversement.
+En effet, pour pouvoir afficher les \emph{Heat maps} il a fallu utiliser des matrices. Cependant, la plupart de nos fonctions renvoyaient
+des vecteurs. \\\\
+
+Il a aussi fallu mettre en place une fonction permettant donc d'afficher les \emph{Heat maps}. Pour cela nous avons utilisé matplotlib.
+Le module possédant déjà une option pour afficher des gradients de température, il nous a juste fallu s'approprier le code.
+
+
+\subsection{Résultats}
+
+
+\end{document}
