@@ -2,6 +2,8 @@
 
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 %%%%%%%%%%%%%%%% Lengths %%%%%%%%%%%%%%%%
 \setlength{\textwidth}{15.5cm}
@@ -102,7 +104,7 @@ Ainsi, si l'on a k le nombre de termes nuls, la complexité est : O($k^2$). Lgit
 
 Le conditionnement d'une matrice est une mesure de la sensibilité de la solution d'un système linéaire par rapport aux perturbations des données d'entrée. Un conditionnement élevé indique que des petites perturbations dans les données d'entrée peuvent provoquer des variations importantes dans la solution du système linéaire.
 Ainsi, ici, on considère que lorsque que le conditionnement est inférieur au préconditionnement, alors il est de bonne qualité.
-Pour étudier le conditionnement des matrices obtenues avec les factorisations de Cholesky complète et incomplète., on utilisera les fonctions \verb|np.linalg.cond| et \verb|np.inv().
+Pour étudier le conditionnement des matrices obtenues avec les factorisations de Cholesky complète et incomplète., on utilisera les fonctions \verb|np.linalg.cond| et \verb|np.inv()|.
 Puisque la factorisation incomplète effectue moins d'opérations, on obtient de meilleurs conditionnements avec cette méthode plutôt qu'avec la factorisation de Cholesky complète.
 
 En résumé, cette partie a exploré les différents aspects de la factorisation de Cholesky et de la factorisation de Cholesky incomplète, en mettant l'accent sur leur efficacité pour les matrices creuses. 
@@ -112,5 +114,82 @@ Nous avons également examiné la qualité des préconditionneurs obtenus à par
 
 \section{Application à l'équation de la chaleur}
 \label{sec:eq_chaleur}
+
+\subsection{Fonctions principales}
+\label{ssec:fonc_princ}
+Grâce à la discrétisation numérique, l'équation de la chaleur peut être ramenée à la résolution d'un système linéaire. 
+La matrice représentant l'opérateur Laplacien étant donnéé, il a suffit de créer la fonction permettant de la construire.
+Cette fonction possède une compléxité en $\Theta(N²)$, étant donné qu'on parcours toute la matrice.
+
+Ensuite, nous avons mis en place des "situations" où certains points étaient sources de chaleur. Cela à permis de voir comment se comportait l'algorithme dans des cas de figures différents. Nous représenterons ici que quelques cas, les autres peuvent être observés à l'exécution du programme python \emph{chaleur.py}. Ces simulations (disponibles nous ont permis d'observer facilement les résultats aberrant et donc de détecter de potentiels problèmes dans nos algorithmes.
+
+
+
+\subsection{Fonctions auxiliaires}
+\label{ssec:fonc_aux}
+Il a été nécessaire de mettre en place des fonctions permettant de passer un vecteur en matrice et inversement.
+En effet, pour pouvoir afficher les \emph{Heat maps} il a fallu utiliser des matrices. Cependant, afin de résoudre l'équation linéaire, l'environnement de taille $N$*$N$ est représenté comme étant un vecteur de taille $N²$.
+
+Il a aussi fallu mettre en place une fonction permettant donc d'afficher les \emph{Heat maps}. Pour cela nous avons utilisé matplotlib.
+Le module possédant déjà une option pour afficher des gradients de température, il nous a juste fallu s'approprier le code.
+
+
+\subsection{Résultats}
+\label{ssec:res}
+Ci-dessous se trouvent nos résultats pour deux situations : la première possédant une source de chaleur centrale, la seconde avec un mur de chaleur sur un côté supérieur.
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_1.png}
+    \caption{Carte de la source de chaleur}
+    \label{subfig:central_source_prev}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_1b.png}
+    \caption{Carte de la répartition de la température}
+    \label{subfig:central_source_temp}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_1c.png}
+    \caption{Evolution du résidu de la méthode du gradient conjugué}
+    \label{subfig:central_source_residus}
+  \end{subfigure}
+  \caption{Simulation du cas d'une source de chaleur centrale}
+  \label{fig:central_source}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_2.png}
+    \caption{Carte de la source de chaleur}
+    \label{subfig:heat_wall_prev}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_2b.png}
+    \caption{Carte de la répartition de la température}
+    \label{subfig:heat_wall_temp}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Chaleur_2c.png}
+    \caption{Evolution du résidu de la méthode du gradient conjugué}
+    \label{subfig:heat_wall_residus}
+  \end{subfigure}
+  \caption{Simulation du cas d'un mur de chaleur}
+  \label{fig:heat_wall}
+\end{figure}
+
+Nos algorithmes semblent fonctionner puisque nous ne remarquons pas d'aberrations dans ces illustrations. Ces méthodes constituent donc une bonne approximation de la solution de l'équation de la chaleur, d'autant plus que les programmes se terminent toujous avec un résidus très proche de 0.
 
 \end{document}
