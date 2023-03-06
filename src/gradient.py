@@ -81,7 +81,7 @@ def precond_conjgrad(A, b, x, M):
     rsold = np.dot(r.T, z)
     rsarray = [rsold]
 
-    for i in range(10*len(b)):
+    for i in range(5*len(b)):
         Ap = np.dot(A, p)
         alpha = rsold / np.dot(p.T, Ap)
         x = x + alpha * p
