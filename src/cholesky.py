@@ -38,16 +38,15 @@ def sym_defpos_matrices_gen(n,k):
 
 
 def cholesky_incomp(A):
-    n = A.shape[0]
-    L = np.zeros((n, n))
-    for i in range(n):
-        for j in range(i+1):
-            s = A[i, j] - np.dot(L[i, :j], L[j, :j])
-            if i == j:
-                L[i, j] = np.sqrt(s)
-            else:
-                L[i, j] = s / L[j, j]
-    return L
+    n = len(A)
+    T = np.zeros_like(A)
+    for j in range(n):
+        T[j, j] = np.sqrt(A[j, j] - np.dot(T[j, :j], T[j, :j]))
+        for i in range(j + 1, n):
+            if A[i, j] != 0:
+                T[i, j] = (A[i, j] - np.dot(T[i, :j], T[j, :j])) / T[j, j]
+    return T
+
 
 ## Matrice A d'exemple pour tester Cholesky complète
 A=np.zeros((4,4))
