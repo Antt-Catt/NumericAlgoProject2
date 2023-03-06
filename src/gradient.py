@@ -12,7 +12,7 @@ def conjgrad(A, b, x):
     rsold = np.dot(r.T, r)
     rsarray = [rsold]
     
-    for i in range(5*len(b)):
+    for i in range(10*len(b)):
         Ap = np.dot(A, p)
         alpha = rsold / np.dot(p.T, Ap)
         x = x + alpha * p
@@ -24,11 +24,11 @@ def conjgrad(A, b, x):
         p = r + (rsnew / rsold) * p
         rsold = rsnew
         
-    # plt.plot(rsarray)
-    # plt.xlabel("Itérations")
-    # plt.ylabel("Résidus")
-    # plt.title("Résidus de la méthode du gradient conjugué sans préconditionneur")
-    #plt.show()
+    plt.plot(rsarray)
+    plt.xlabel("Itérations")
+    plt.ylabel("Résidus")
+    plt.title("Résidus de la méthode du gradient conjugué sans préconditionneur")
+    plt.show()
 
     return x
 
@@ -38,7 +38,6 @@ print("Tests de conjgrad sans préconditionneur :")
 print("2 équations :")
 A1 = np.random.rand(2, 2)
 A1 = np.dot(A1, A1.T)
-#A1 = np.array([[3,1],[1,2]])
 B1 = np.random.rand(2)
 print(conjgrad(A1, B1, np.full((2), 0)), "obtenu")
 print(np.linalg.solve(A1, B1), "attendu")
@@ -82,7 +81,7 @@ def precond_conjgrad(A, b, x, M):
     rsold = np.dot(r.T, z)
     rsarray = [rsold]
 
-    for i in range(25*len(b)):
+    for i in range(10*len(b)):
         Ap = np.dot(A, p)
         alpha = rsold / np.dot(p.T, Ap)
         x = x + alpha * p
@@ -95,13 +94,14 @@ def precond_conjgrad(A, b, x, M):
         p = z + (rsnew / rsold) * p
         rsold = rsnew
 
-    # plt.plot(rsarray)
-    # plt.xlabel("Itérations")
-    # plt.ylabel("Résidus")
-    # plt.title("Résidus de la méthode du gradient conjugué avec préconditionneurs")
-    # plt.show()
+    plt.plot(rsarray)
+    plt.xlabel("Itérations")
+    plt.ylabel("Résidus")
+    plt.title("Résidus de la méthode du gradient conjugué avec préconditionneur")
+    plt.show()
     
     return x
+
 
 print("Tests de conjgrad avec préconditionneur :")
 ## Les matrices Ak sont définies positives
